@@ -26,11 +26,17 @@ public class DoctorService {
         return new ResponseEntity<>(doctorDAO.findById(id).get(),HttpStatus.OK);
     }
 
-    public ResponseEntity<Doctor> createDoctorDetails(Doctor doctor, MultipartFile image) throws IOException {
-        doctor.setImageName(image.getOriginalFilename());
-        doctor.setImageType(image.getContentType());
-        doctor.setImageData(image.getBytes());
-        return new ResponseEntity<>(doctorDAO.save(doctor),HttpStatus.OK);
+    public ResponseEntity<String> createDoctorDetails(Doctor doctor, MultipartFile image) throws IOException {
+        System.out.println("Detected Content-Type: " + image.getContentType());
+        if (image.getContentType() == null || !image.getContentType().startsWith("image/")) {
+            return new ResponseEntity<>("Only image files (JPEG, PNG, etc.) are allowed!",HttpStatus.FORBIDDEN);
+        }else {
+            doctor.setImageName(image.getOriginalFilename());
+            doctor.setImageType(image.getContentType());
+            doctor.setImageData(image.getBytes());
+            doctorDAO.save(doctor);
+            return new ResponseEntity<>("Doctor Details added Successfully", HttpStatus.OK);
+        }
 
     }
 }
