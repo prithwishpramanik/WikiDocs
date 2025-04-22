@@ -47,7 +47,7 @@ public class DoctorController {
     }
 
     @PostMapping("/createDoctor")
-    public ResponseEntity<Doctor> createDoctorDetails(@RequestPart Doctor doctor,@RequestPart MultipartFile image){
+    public ResponseEntity<String> createDoctorDetails(@RequestPart Doctor doctor,@RequestPart MultipartFile image){
         try{
             return doctorService.createDoctorDetails(doctor,image);
         }catch(Exception e){
